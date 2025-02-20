@@ -6,26 +6,35 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/liasica/goomp/pusher"
 	"github.com/liasica/goomp/topic"
 )
 
-const (
-	articlesCacheFile = "./runtime/articles.json"
+var (
+	cached    = make(map[int]string)
+	directory = "./runtime"
 )
-
-var cached = make(map[int]string)
 
 func currentTime() string {
 	return time.Now().Format("2006-01-02 15:04:05")
 }
 
 func main() {
-	os.MkdirAll("./runtime", os.ModePerm)
+	flag.StringVar(&directory, "dir", "./runtime", "runtime directory")
+
+	flag.Parse()
+
+	fmt.Printf("runtime directory: %s\n", directory)
+
+	os.MkdirAll(directory, os.ModePerm)
+
+	var articlesCacheFile = filepath.Join(directory, "articles.json")
 
 	if _, err := os.Stat(articlesCacheFile); os.IsNotExist(err) {
 		_, err = os.Create(articlesCacheFile)
@@ -52,7 +61,7 @@ func main() {
 				cached[article.ContentId] = article.Title
 				b, _ = json.MarshalIndent(cached, "", "  ")
 				_ = os.WriteFile(articlesCacheFile, b, 0644)
-				
+
 				// send notification
 				p.PostMessage(pusher.PostMessageRequest{
 					Content:     article.Title,

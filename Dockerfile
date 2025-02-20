@@ -17,4 +17,4 @@ RUN apk update \
 
 COPY --from=builder /go/goomp/build/goomp /usr/bin/goomp
 
-ENTRYPOINT [ "/usr/bin/goomp" ]
+ENTRYPOINT [ "/usr/bin/goomp", "-dir", "/opt/goomp" ]
