@@ -20,6 +20,10 @@ const (
 
 var cached = make(map[int]string)
 
+func currentTime() string {
+	return time.Now().Format("2006-01-02 15:04:05")
+}
+
 func main() {
 	os.MkdirAll("./runtime", os.ModePerm)
 
@@ -40,6 +44,7 @@ func main() {
 
 	for ; true; <-ticker.C {
 		articles := topic.QueryPosts()
+		fmt.Printf("%s: got %d articles\n", currentTime(), len(articles))
 
 		for _, article := range articles {
 			if _, ok := cached[article.ContentId]; !ok {
@@ -47,6 +52,7 @@ func main() {
 				cached[article.ContentId] = article.Title
 				b, _ = json.MarshalIndent(cached, "", "  ")
 				_ = os.WriteFile(articlesCacheFile, b, 0644)
+				
 				// send notification
 				p.PostMessage(pusher.PostMessageRequest{
 					Content:     article.Title,
