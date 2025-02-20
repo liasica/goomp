@@ -10,8 +10,8 @@ import (
 	"os"
 	"time"
 
-	"goomp/pusher"
-	"goomp/topic"
+	"github.com/liasica/goomp/pusher"
+	"github.com/liasica/goomp/topic"
 )
 
 const (

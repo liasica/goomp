@@ -1,4 +1,4 @@
-module goomp
+module github.com/liasica/goomp
 
 go 1.24
 
