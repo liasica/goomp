@@ -67,3 +67,11 @@ func (p *Pusher) PostMessage(req PostMessageRequest) {
 		fmt.Printf("post message record id: %d\n", item.SendRecordId)
 	}
 }
+
+func CutMessage(message string, n int) string {
+	if len(message) <= n {
+		return message
+	}
+
+	return message[:n-3] + "..."
+}

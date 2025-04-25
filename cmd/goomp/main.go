@@ -64,8 +64,8 @@ func main() {
 
 				// send notification
 				p.PostMessage(pusher.PostMessageRequest{
-					Content:     article.Title,
-					Summary:     article.Title,
+					Content:     article.SubTitle,
+					Summary:     pusher.CutMessage(article.Title, 100),
 					ContentType: 1,
 					TopicIds:    []int{37764},
 					Url:         fmt.Sprintf(`https://omp.uopes.cn/static/webapp/share/article_details.html?contentId=%d&fid=0004&pkgName=app.huawei.motor&EC=&userName=hid55765798`, article.ContentId),
