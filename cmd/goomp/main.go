@@ -51,6 +51,11 @@ func main() {
 
 	p := pusher.NewGotify(os.Getenv("GOTIFY_URL"))
 
+	fmt.Println("environment variables:")
+	for _, s := range os.Environ() {
+		fmt.Println("  - ", s)
+	}
+
 	for ; true; <-ticker.C {
 		articles := topic.QueryPosts()
 
