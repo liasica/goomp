@@ -4,21 +4,27 @@
 
 package pusher
 
-type Pusher struct {
-	token string
+import "time"
+
+type Pusher interface {
+	Push(title string, contentId int) error
 }
 
-type ResponseData interface {
-	PostMessageDataList
+type Message struct {
+	Id        int       `json:"id"`
+	Title     string    `json:"title"`
+	Body      string    `json:"body"`
+	Image     *string   `json:"image"`
+	Author    string    `json:"author"`
+	CreatTime time.Time `json:"creatTime"`
 }
 
-type Response[T ResponseData] struct {
-	Code    int    `json:"code"`
-	Msg     string `json:"msg"`
-	Data    T      `json:"data"`
-	Success bool   `json:"success"`
-}
+func (m *Message) CuntContent(i int) string {
+	body := []rune(m.Body)
+	n := len(body)
+	if n <= i {
+		return m.Body
+	}
 
-func NewPusher(token string) *Pusher {
-	return &Pusher{token: token}
+	return string(body[:i]) + "..."
 }

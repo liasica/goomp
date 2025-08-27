@@ -49,10 +49,11 @@ func main() {
 
 	ticker := time.NewTicker(5 * time.Minute)
 
-	p := pusher.NewPusher(os.Getenv("APP_TOKEN"))
+	p := pusher.NewGotify(os.Getenv("GOTIFY_URL"))
 
 	for ; true; <-ticker.C {
 		articles := topic.QueryPosts()
+
 		fmt.Printf("%s: got %d articles\n", currentTime(), len(articles))
 
 		for _, article := range articles {
@@ -63,12 +64,17 @@ func main() {
 				_ = os.WriteFile(articlesCacheFile, b, 0644)
 
 				// send notification
-				p.PostMessage(pusher.PostMessageRequest{
-					Content:     article.SubTitle,
-					Summary:     pusher.CutMessage(article.Title, 100),
-					ContentType: 1,
-					TopicIds:    []int{37764},
-					Url:         fmt.Sprintf(`https://omp.uopes.cn/static/webapp/share/article_details.html?contentId=%d&fid=0004&pkgName=app.huawei.motor&EC=&userName=hid55765798`, article.ContentId),
+				var image *string
+				if len(article.ImageContent) > 0 {
+					image = &article.ImageContent[0]
+				}
+				p.Push(&pusher.Message{
+					Id:        article.ContentId,
+					Title:     article.Title,
+					Body:      article.TextContent,
+					Image:     image,
+					Author:    article.CreatorName,
+					CreatTime: article.CreateTime,
 				})
 			}
 		}

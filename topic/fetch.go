@@ -93,10 +93,10 @@ type Article struct {
 }
 
 type Response struct {
-	Code       string    `json:"code"`
-	ResultCode string    `json:"resultCode"`
-	Msg        string    `json:"msg"`
-	PostList   []Article `json:"postList"`
+	Code       string     `json:"code"`
+	ResultCode string     `json:"resultCode"`
+	Msg        string     `json:"msg"`
+	PostList   []*Article `json:"postList"`
 	Page       struct {
 		PageNum    int         `json:"pageNum"`
 		PageSize   int         `json:"pageSize"`
@@ -126,7 +126,7 @@ type Response struct {
 //	  -H 'sec-ch-ua-mobile: ?0' \
 //	  -H 'sec-ch-ua-platform: "macOS"' \
 //	  -H 'traceID: 00002383EAE03453'
-func QueryPosts(opts ...Option) (articles []Article) {
+func QueryPosts(opts ...Option) (articles []*Article) {
 	options := &Options{
 		page: pageStart,
 	}
