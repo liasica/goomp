@@ -19,7 +19,7 @@ import (
 var (
 	cached            = make(map[int]string)
 	directory         = "./runtime"
-	articlesCacheFile = filepath.Join(directory, "articles.json")
+	articlesCacheFile string
 )
 
 func currentTime() string {
@@ -43,6 +43,8 @@ func main() {
 		fmt.Println("create runtime directory failed: ", err)
 		return
 	}
+
+	articlesCacheFile = filepath.Join(directory, "articles.json")
 
 	if _, err = os.Stat(articlesCacheFile); os.IsNotExist(err) {
 		_, err = os.Create(articlesCacheFile)
